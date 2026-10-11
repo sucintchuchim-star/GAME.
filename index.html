@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROBLOX SCRIPT HUB</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                        cyber: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        cyber: {
+                            dark: '#06060c',
+                            card: '#10101d',
+                            accent: '#a855f7',
+                            neon: '#00ffcc',
+                            danger: '#ff0055'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #06060c;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 255, 204, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glow-box {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+        }
+        .glow-box:hover {
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+        }
+    </style>
+</head>
+<body class="text-gray-200 min-h-screen flex flex-col justify-between selection:bg-purple-500 selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="border-b border-purple-900/50 bg-cyber-dark/90 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="filterCategory('all')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                        <i class="fa-solid font-cyber text-xl text-black font-black">R</i>
+                    </div>
+                    <span class="font-cyber font-bold text-xl sm:text-2xl tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+                        ROBLOX<span class="text-white">HUB</span>
+                    </span>
+                </div>
+
+                <div>
+                    <button id="openAuthBtn" class="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold px-4 py-2.5 rounded-xl transition-all duration-300 shadow-lg shadow-purple-900/50 border border-purple-400/30 active:scale-95 cursor-pointer">
+                        <i class="fa-solid fa-lock text-cyan-300"></i>
+                        <span>แอดมิน</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6 text-center">
+        <h1 class="font-cyber text-3xl sm:text-5xl font-black tracking-wide glow-text mb-3 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-cyan-300 to-purple-400">
+            SCRIPT DISTRIBUTION
+        </h1>
+        <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+            แหล่งรวมสคริปต์ Roblox ตึงๆ คัดสรรมาให้ใช้งาน ลอกโค้ดไปใช้ได้ง่ายๆ เพียงคลิกเดียว
+        </p>
+
+        <!-- Dynamic Category Filter Buttons -->
+        <div id="categoryContainer" class="flex flex-wrap justify-center gap-2 mt-8">
+            <!-- Dynamic categories generated via JS -->
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+        <div id="scriptGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Script Cards generated via JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20">
+            <i class="fa-solid fa-code text-6xl text-purple-900/40 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-400">ยังไม่มีสคริปต์ในระบบ</h3>
+            <p class="text-gray-600 text-sm mt-1">กดที่เมนู "แอดมิน" ด้านบนเพื่อเพิ่มสคริปต์ใหม่</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-purple-900/30 bg-cyber-dark/50 py-6 mt-12 text-center text-xs text-gray-500">
+        <p>© 2026 ROBLOX SCRIPT HUB - All Rights Reserved</p>
+    </footer>
+
+    <!-- Password Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-cyber-card border border-purple-500/30 rounded-2xl p-6 w-full max-w-md glow-box relative">
+            <button id="closeAuthBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white cursor-pointer">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-purple-600/20 text-purple-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-purple-500/40">
+                    <i class="fa-solid fa-key text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">ยืนยันตัวตนแอดมิน</h3>
+                <p class="text-gray-400 text-xs mt-1">กรอกรหัสผ่านเพื่อเข้าสู่ระบบจัดการ</p>
+            </div>
+            <form id="authForm" class="space-y-4">
+                <div>
+                    <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่าน..." required class="w-full bg-black/50 border border-purple-900 focus:border-purple-500 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none transition-all">
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-purple-900/50 cursor-pointer">
+                    เข้าสู่ระบบ
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
+        <div class="bg-cyber-card border border-purple-500/30 rounded-2xl p-6 w-full max-w-2xl my-8 glow-box relative">
+            <div class="flex items-center justify-between pb-4 border-b border-purple-900/50 mb-6">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-sliders text-cyan-400"></i>
+                    <h3 class="text-xl font-bold text-white">ระบบจัดการแอดมิน</h3>
+                </div>
+                <button id="closeAdminBtn" class="text-gray-400 hover:text-white cursor-pointer">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form id="scriptForm" class="space-y-4 mb-8 bg-black/30 p-4 rounded-xl border border-purple-900/40">
+                <input type="hidden" id="scriptId">
+                <h4 id="formTitle" class="text-sm font-bold text-cyan-400 uppercase tracking-wider">➕ เพิ่มสคริปต์ใหม่</h4>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">ชื่อสคริปต์ / หัวข้อ</label>
+                        <input type="text" id="scriptTitle" placeholder="เช่น Hitbox Pro V1" required class="w-full bg-black/60 border border-purple-900/80 focus:border-purple-500 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">หมวดหมู่ / ชื่อเกม</label>
+                        <input type="text" id="scriptCategory" placeholder="เช่น Blox Fruits, Universal" required class="w-full bg-black/60 border border-purple-900/80 focus:border-purple-500 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">โค้ดสคริปต์ (Lua / Loadstring)</label>
+                    <textarea id="scriptCode" rows="4" placeholder="วางโค้ดสคริปต์ที่นี่..." required class="w-full bg-black/60 border border-purple-900/80 focus:border-purple-500 rounded-lg px-3 py-2 text-xs text-green-400 font-mono outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" id="resetFormBtn" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-xs font-semibold transition-all cursor-pointer">ยกเลิก</button>
+                    <button type="submit" class="px-5 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold transition-all shadow-md shadow-purple-900/50 cursor-pointer">บันทึกสคริปต์</button>
+                </div>
+            </form>
+
+            <!-- Script List in Admin -->
+            <div class="space-y-3">
+                <h4 class="text-sm font-bold text-gray-300">รายการสคริปต์ทั้งหมดในระบบ</h4>
+                <div id="adminScriptList" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                    <!-- Admin list items -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-purple-600 text-white px-5 py-3 rounded-xl shadow-xl flex items-center space-x-3 translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i class="fa-solid fa-circle-check text-cyan-300"></i>
+        <span id="toastMsg" class="text-sm font-medium">สำเร็จ!</span>
+    </div>
+
+    <script>
+        // Data Store
+        let scripts = JSON.parse(localStorage.getItem('roblox_scripts')) || [];
+        let currentCategory = 'all';
+
+        // Initialize Elements & Events
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderScripts();
+
+            // Direct Event Listeners to prevent any click issues
+            document.getElementById('openAuthBtn').addEventListener('click', () => {
+                document.getElementById('authModal').classList.remove('hidden');
+                document.getElementById('adminPassword').focus();
+            });
+
+            document.getElementById('closeAuthBtn').addEventListener('click', closeAuthModal);
+            document.getElementById('closeAdminBtn').addEventListener('click', closeAdminModal);
+            document.getElementById('resetFormBtn').addEventListener('click', resetForm);
+
+            document.getElementById('authForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const pass = document.getElementById('adminPassword').value;
+                if (pass === 'PASSWORDEIT') {
+                    closeAuthModal();
+                    document.getElementById('adminModal').classList.remove('hidden');
+                    renderAdminScriptList();
+                    showToast('เข้าสู่ระบบแอดมินสำเร็จ');
+                } else {
+                    alert('รหัสผ่านไม่ถูกต้อง!');
+                }
+            });
+
+            document.getElementById('scriptForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('scriptId').value;
+                const title = document.getElementById('scriptTitle').value.trim();
+                const category = document.getElementById('scriptCategory').value.trim();
+                const code = document.getElementById('scriptCode').value.trim();
+
+                if (id) {
+                    const index = scripts.findIndex(s => s.id === id);
+                    if (index !== -1) {
+                        scripts[index] = { ...scripts[index], title, category, code };
+                    }
+                } else {
+                    const newScript = {
+                        id: Date.now().toString(),
+                        title,
+                        category,
+                        code,
+                        date: new Date().toLocaleDateString('th-TH')
+                    };
+                    scripts.unshift(newScript);
+                }
+
+                saveData();
+                renderCategories();
+                renderScripts();
+                renderAdminScriptList();
+                resetForm();
+                showToast('บันทึกข้อมูลเรียบร้อยแล้ว');
+            });
+        });
+
+        function saveData() {
+            localStorage.setItem('roblox_scripts', JSON.stringify(scripts));
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+            resetForm();
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            const categories = ['all', ...new Set(scripts.map(s => s.category))];
+
+            container.innerHTML = categories.map(cat => `
+                <button onclick="filterCategory('${cat}')" class="px-4 py-1.5 rounded-full text-xs font-semibold transition-all border cursor-pointer ${
+                    currentCategory === cat 
+                    ? 'bg-purple-600 text-white border-purple-400 shadow-lg shadow-purple-900/50' 
+                    : 'bg-cyber-card text-gray-400 border-purple-900/40 hover:border-purple-600 hover:text-white'
+                }">
+                    ${cat === 'all' ? 'ทั้งหมด' : cat}
+                </button>
+            `).join('');
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            renderCategories();
+            renderScripts();
+        }
+
+        function renderScripts() {
+            const grid = document.getElementById('scriptGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            const filtered = currentCategory === 'all' 
+                ? scripts 
+                : scripts.filter(s => s.category === currentCategory);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(item => `
+                <div class="bg-cyber-card border border-purple-900/40 rounded-2xl p-5 glow-box transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[10px] uppercase tracking-wider font-bold text-cyan-400 bg-cyan-950/50 border border-cyan-800/40 px-2.5 py-1 rounded-md">
+                                ${escapeHtml(item.category)}
+                            </span>
+                            <span class="text-[10px] text-gray-500 font-mono">${item.date || ''}</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white mb-3 line-clamp-1">${escapeHtml(item.title)}</h3>
+                        <div class="bg-black/60 border border-purple-950 rounded-xl p-3 mb-4 font-mono text-xs text-purple-300 overflow-x-auto max-h-24">
+                            <code>${escapeHtml(item.code)}</code>
+                        </div>
+                    </div>
+                    <button onclick="copyScript('${item.id}')" class="w-full bg-purple-600/20 hover:bg-purple-600 border border-purple-500/40 hover:border-purple-500 text-purple-200 hover:text-white font-bold py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 group cursor-pointer">
+                        <i class="fa-regular fa-copy group-hover:scale-110 transition-transform"></i>
+                        <span>คัดลอกสคริปต์</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function copyScript(id) {
+            const item = scripts.find(s => s.id === id);
+            if (item) {
+                navigator.clipboard.writeText(item.code).then(() => {
+                    showToast('คัดลอกสคริปต์เรียบร้อยแล้ว!');
+                });
+            }
+        }
+
+        function editScript(id) {
+            const item = scripts.find(s => s.id === id);
+            if (item) {
+                document.getElementById('scriptId').value = item.id;
+                document.getElementById('scriptTitle').value = item.title;
+                document.getElementById('scriptCategory').value = item.category;
+                document.getElementById('scriptCode').value = item.code;
+                document.getElementById('formTitle').innerText = '✏️ แก้ไขสคริปต์';
+            }
+        }
+
+        function deleteScript(id) {
+            if (confirm('คุณต้องการลบสคริปต์นี้ใช่หรือไม่?')) {
+                scripts = scripts.filter(s => s.id !== id);
+                saveData();
+                renderCategories();
+                renderScripts();
+                renderAdminScriptList();
+                showToast('ลบสคริปต์เรียบร้อยแล้ว');
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('scriptId').value = '';
+            document.getElementById('scriptTitle').value = '';
+            document.getElementById('scriptCategory').value = '';
+            document.getElementById('scriptCode').value = '';
+            document.getElementById('formTitle').innerText = '➕ เพิ่มสคริปต์ใหม่';
+        }
+
+        function renderAdminScriptList() {
+            const list = document.getElementById('adminScriptList');
+            if (scripts.length === 0) {
+                list.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">ยังไม่มีสคริปต์ในระบบ</p>';
+                return;
+            }
+
+            list.innerHTML = scripts.map(item => `
+                <div class="flex items-center justify-between bg-black/40 border border-purple-900/30 p-2.5 rounded-lg text-xs">
+                    <div class="truncate max-w-[250px] sm:max-w-xs">
+                        <span class="text-purple-400 font-bold">[${escapeHtml(item.category)}]</span>
+                        <span class="text-gray-200 ml-1 font-medium">${escapeHtml(item.title)}</span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <button onclick="editScript('${item.id}')" class="p-1.5 text-cyan-400 hover:bg-cyan-950/50 rounded transition-all cursor-pointer">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="deleteScript('${item.id}')" class="p-1.5 text-rose-500 hover:bg-rose-950/50 rounded transition-all cursor-pointer">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showToast(msg) {
+            co
